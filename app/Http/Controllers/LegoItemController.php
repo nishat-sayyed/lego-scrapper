@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\LegoItem;
-use Illuminate\Http\Request;
 use Goutte\Client;
-use function _\difference;
 
 class LegoItemController extends Controller
 {
@@ -69,15 +67,14 @@ class LegoItemController extends Controller
 
             if (count($filteredArray) > 0) {
                 // if element found - check if there are any changes between scraped result and the db record
-                // leaving date_spotted, id, created_at, updated_at
                 foreach ($filteredArray as $lego) {
                     $diff = array_diff($lego, $result);
                     if (count($diff) > 0) {
                         // if changes found - update db record with scraped result and email update (use update email template)
-                        LegoItem::where(['number' => $result['number']])->update($result);
+                        LegoItem::where(['url' => $result['url']])->update($result);
                     }
                 }
-            } else {
+            } else if (count($filteredArray) == 0) {
                 //  if element not found - create a new record in db with this scraped result and email update (use create email template)
                 LegoItem::insert($result);
             }
