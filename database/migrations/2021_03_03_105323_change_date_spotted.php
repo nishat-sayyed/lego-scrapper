@@ -14,7 +14,7 @@ class ChangeDateSpotted extends Migration
     public function up()
     {
         Schema::table('lego_items', function (Blueprint $table) {
-            $table->date('date_spotted')->nullable()->change();
+            $table->date('date_spotted')->nullable()->default(null)->change();
         });
     }
 
@@ -26,7 +26,7 @@ class ChangeDateSpotted extends Migration
     public function down()
     {
         Schema::table('lego_items', function (Blueprint $table) {
-            $table->timestamp('date_spotted')->nullable()->change();
+            $table->timestamp('date_spotted')->change();
         });
     }
 }
