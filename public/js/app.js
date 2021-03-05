@@ -1861,6 +1861,78 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -1874,11 +1946,14 @@ __webpack_require__.r(__webpack_exports__);
     fetchData: function fetchData() {
       var _this = this;
 
-      fetch('/api/legos').then(function (response) {
+      fetch("/api/legos").then(function (response) {
         return response.json();
       }).then(function (response) {
         return _this.legos = response;
       });
+    },
+    getCurrencySymbol: function getCurrencySymbol(market) {
+      return market === "US" ? "$" : "£";
     }
   }
 });
@@ -37450,34 +37525,199 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container" }, [
-    _c("div", { staticClass: "row justify-content-center" }, [
-      _c("div", { staticClass: "col-md-8" }, [
-        _c(
-          "div",
-          { staticClass: "card" },
-          [
-            _c("div", { staticClass: "card-header" }, [
-              _vm._v("Example Component")
-            ]),
-            _vm._v(" "),
-            _vm._l(_vm.legos, function(lego) {
-              return _c("div", { key: lego.id, staticClass: "card-body" }, [
-                _vm._v(
-                  "\n                    " +
-                    _vm._s(lego.name) +
-                    "\n                "
-                )
-              ])
-            })
-          ],
-          2
-        )
-      ])
-    ])
+  return _c("div", { staticClass: "overflow-x-auto" }, [
+    _c(
+      "div",
+      {
+        staticClass:
+          "min-w-screen min-h-screen flex items-center justify-center bg-gray-100 font-sans overflow-hidden"
+      },
+      [
+        _c("div", { staticClass: "w-full lg:w-11/12" }, [
+          _c("div", { staticClass: "bg-white shadow-md rounded my-6" }, [
+            _c("table", { staticClass: "min-w-max w-full table-auto" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c(
+                "tbody",
+                { staticClass: "text-gray-600 text-sm font-light" },
+                _vm._l(_vm.legos, function(lego) {
+                  return _c(
+                    "tr",
+                    {
+                      key: lego.id,
+                      staticClass: "border-b border-gray-200 hover:bg-gray-100"
+                    },
+                    [
+                      _c(
+                        "td",
+                        {
+                          staticClass: "py-3 px-6 text-left whitespace-nowrap"
+                        },
+                        [
+                          _c(
+                            "div",
+                            {
+                              staticClass: "flex items-center text-purple-600"
+                            },
+                            [
+                              _c(
+                                "a",
+                                {
+                                  attrs: {
+                                    target: "_blank",
+                                    href: "https://" + lego.url
+                                  }
+                                },
+                                [_vm._v(_vm._s(lego.number))]
+                              )
+                            ]
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c("td", { staticClass: "py-3 px-6 text-left" }, [
+                        _c("span", { staticClass: "font-medium" }, [
+                          _c(
+                            "a",
+                            {
+                              attrs: {
+                                target: "_blank",
+                                href: "https://" + lego.url
+                              }
+                            },
+                            [
+                              _vm._v(
+                                _vm._s(lego.name.substring(0, 100)) +
+                                  "\n                  "
+                              )
+                            ]
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("td", { staticClass: "py-3 px-6 text-center" }, [
+                        _c("span", [
+                          _vm._v(_vm._s(lego.marketplace.toUpperCase()))
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("td", { staticClass: "py-3 px-6 text-center" }, [
+                        _c("span", { staticClass: "font-medium" }, [
+                          _vm._v(
+                            _vm._s(
+                              _vm.getCurrencySymbol(lego.marketplace) +
+                                lego.price
+                            )
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("td", { staticClass: "py-3 px-6 text-center" }, [
+                        _c("span", { staticClass: "font-medium" }, [
+                          _vm._v(
+                            _vm._s(
+                              _vm.getCurrencySymbol(lego.marketplace) +
+                                (lego.sale_price ? lego.sale_price : lego.price)
+                            )
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("td", { staticClass: "py-3 px-6 text-center" }, [
+                        _c("span", [
+                          _vm._v(
+                            _vm._s(
+                              _vm.getCurrencySymbol(lego.marketplace) +
+                                lego.discount_amount
+                            )
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("td", { staticClass: "py-3 px-6 text-center" }, [
+                        _c("span", [
+                          _vm._v(_vm._s(lego.discount_percentage) + "%")
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("td", { staticClass: "py-3 px-6 text-center" }, [
+                        _c(
+                          "span",
+                          {
+                            class: [
+                              lego.stock_status === "Available"
+                                ? "bg-green-200 text-green-600"
+                                : "bg-red-200 text-red-600",
+                              "py-1 px-3 rounded-full text-xs"
+                            ]
+                          },
+                          [_vm._v(_vm._s(lego.stock_status))]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("td", { staticClass: "py-3 text-center" }, [
+                        _c("span", [_vm._v(_vm._s(lego.date_spotted))])
+                      ])
+                    ]
+                  )
+                }),
+                0
+              )
+            ])
+          ])
+        ])
+      ]
+    )
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c(
+        "tr",
+        {
+          staticClass:
+            "bg-gray-200 text-gray-600 uppercase text-sm leading-normal"
+        },
+        [
+          _c("th", { staticClass: "py-3 px-6 text-left" }, [_vm._v("Item #")]),
+          _vm._v(" "),
+          _c("th", { staticClass: "py-3 px-6 text-left" }, [_vm._v("Name")]),
+          _vm._v(" "),
+          _c("th", { staticClass: "py-3 px-6 text-center" }, [
+            _vm._v("Market")
+          ]),
+          _vm._v(" "),
+          _c("th", { staticClass: "py-3 px-6 text-center" }, [_vm._v("Price")]),
+          _vm._v(" "),
+          _c("th", { staticClass: "py-3 px-6 text-center" }, [
+            _vm._v("Sale Price")
+          ]),
+          _vm._v(" "),
+          _c("th", { staticClass: "py-3 px-6 text-center" }, [
+            _vm._v("Discount amount")
+          ]),
+          _vm._v(" "),
+          _c("th", { staticClass: "py-3 px-6 text-center" }, [
+            _vm._v("Discount %")
+          ]),
+          _vm._v(" "),
+          _c("th", { staticClass: "py-3 px-6 text-center" }, [
+            _vm._v("Status")
+          ]),
+          _vm._v(" "),
+          _c("th", { staticClass: "py-3 px-6 text-center" }, [
+            _vm._v("Date spotted")
+          ])
+        ]
+      )
+    ])
+  }
+]
 render._withStripped = true
 
 
