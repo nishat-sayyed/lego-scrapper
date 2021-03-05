@@ -28,7 +28,7 @@
     </head>
     <body class="antialiased">
         <div id="app">
-            <example-component></example-component>
+            <lego-table></lego-table>
         </div>
     </body>
 </html>

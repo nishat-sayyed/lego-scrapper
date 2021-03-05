@@ -37,7 +37,7 @@
                 <td class="py-3 px-6 text-left">
                   <span class="font-medium">
                     <a target="_blank" :href="`https://${lego.url}`"
-                      >{{ lego.name.substring(0, 100) }}
+                      >{{ lego.name.substring(0, 40) }}
                     </a>
                   </span>
                 </td>
