@@ -14,4 +14,6 @@ use App\Http\Controllers\LegoItemController;
 |
 */
 
-Route::get('/', [LegoItemController::class, 'index']);
+Route::get('/', function () {
+    return view('welcome');
+});
