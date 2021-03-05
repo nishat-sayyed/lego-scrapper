@@ -103,6 +103,10 @@ class ScrapeLego extends Command
             if (count($filteredArray) > 0) {
                 // if element found - check if there are any changes between scraped result and the db record
                 foreach ($filteredArray as $lego) {
+                    // skip date_spotted attribute
+                    unset($lego['date_spotted']);
+                    unset($result['date_spotted']);
+
                     $diff = array_diff($lego, $result);
                     if (count($diff) > 0) {
                         // if changes found - update db record with scraped result and email update (use update email template)
