@@ -2,6 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\Mail\LegoAdded;
+use App\Mail\LegoDeleted;
+use App\Mail\LegoUpdated;
+
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Console\Command;
 
 use App\Models\LegoItem;
@@ -14,7 +19,7 @@ class ScrapeLego extends Command
      *
      * @var string
      */
-    protected $signature = 'scrape:lego {--market=uk}';
+    protected $signature = 'scrape:lego {--market=uk} {--silent}';
 
     /**
      * The console command description.
@@ -41,6 +46,7 @@ class ScrapeLego extends Command
     public function handle()
     {
         $market = $this->option('market');
+
         $url = $market == 'us' ? 'https://www.lego.com/en-us/categories/retiring-soon' : 'https://www.lego.com/en-gb/categories/retiring-soon';
         $client = new Client();
 
@@ -76,6 +82,10 @@ class ScrapeLego extends Command
 
     private function mergeChangesWithDb($scrapedResults, $market)
     {
+        $silent = $this->option('silent');
+
+        $recipientEmail = env('MAIL_RECIPEINT', 'nishatsayyed26@gmail.com');
+
         // NOTE: $scrapedResults always takes precedence over db records.
         $legos = LegoItem::where(['marketplace' => $market == 'us' ? 'US' : 'UK'])->get();
         // to sync db with scraped result, find out data that is present in db but not in scraped result
@@ -88,6 +98,9 @@ class ScrapeLego extends Command
             if (count($filteredArray) == 0) {
                 // if record not found in scrapedResults - delete record from db, email update (use delete email template)
                 $lego->delete();
+                if (!$silent) {
+                    Mail::to($recipientEmail)->send(new LegoDeleted($lego->toArray()));
+                }
                 // update in-memory db collection
                 unset($legos[$index]);
             }
@@ -103,19 +116,29 @@ class ScrapeLego extends Command
             if (count($filteredArray) > 0) {
                 // if element found - check if there are any changes between scraped result and the db record
                 foreach ($filteredArray as $lego) {
+                    // clean data
                     // skip date_spotted attribute
                     unset($lego['date_spotted']);
                     unset($result['date_spotted']);
+                    $lego['price'] = (float) $lego['price'];
+                    $lego['sale_price'] = (float) $lego['sale_price'];
+                    $lego['discount_amount'] = (float) $lego['discount_amount'];
 
                     $diff = array_diff($lego, $result);
                     if (count($diff) > 0) {
                         // if changes found - update db record with scraped result and email update (use update email template)
                         LegoItem::where(['url' => $result['url']])->update($result);
+                        if (!$silent) {
+                            Mail::to($recipientEmail)->send(new LegoUpdated($result));
+                        }
                     }
                 }
             } else if (count($filteredArray) == 0) {
                 //  if element not found - create a new record in db with this scraped result and email update (use create email template)
                 LegoItem::insert($result);
+                if (!$silent) {
+                    Mail::to($recipientEmail)->send(new LegoAdded($result));
+                }
             }
         }
     }
@@ -147,9 +170,9 @@ class ScrapeLego extends Command
                 $salePriceText = $node->filter('[data-test="product-price-sale"]')->text();
                 $salePrice = floatval(str_replace($priceDelimiter, '', substr($salePriceText, strrpos($salePriceText, $priceDelimiter))));
             }
-            $discountAmount = 0;
+            $discountAmount = 0.00;
             if ($salePrice != null && $price > $salePrice) {
-                $discountAmount = floatval(number_format((float) $price - $salePrice, 2, '.', ''));
+                $discountAmount = (float)(number_format((float) $price - $salePrice, 2, '.', ''));
             }
             $discountPercentage = 0;
             if ($discountAmount != 0) {
