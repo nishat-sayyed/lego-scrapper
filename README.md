@@ -33,7 +33,7 @@
 
 ## About The Project
 
-[![Lego scrapper screenshot][product-screenshot]](https://example.com)
+[![Lego scrapper screenshot][product-screenshot]](https://github.com/nishat-sayyed/lego-scrapper/blob/main/screenshot.png)
 
 LEGO is a very popular toy company. They have a huge number of products and occasionally decide to stop producing some of these products. The LEGO website has a list of products that are no longer in production and will soon be unavailable for purchase. They describe these products as ‘retiring soon’.
 
