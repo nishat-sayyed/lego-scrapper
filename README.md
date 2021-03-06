@@ -1,62 +1,149 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
-
+<br />
 <p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <h3 align="center">Lego Scrapper</h3>
+
+  <p align="center">
+    Scrapper to crawl <a href="https://www.lego.com/en-gb/categories/retiring-soon">UK</a> and <a href="https://www.lego.com/en-us/categories/retiring-soon">US</a> Lego Retiring Soon pages
+  </p>
 </p>
 
-## About Laravel
+<!-- TABLE OF CONTENTS -->
+<details open="open">
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
+      </ul>
+    </li>
+    <li><a href="#usage">Usage</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ol>
+</details>
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+<!-- ABOUT THE PROJECT -->
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## About The Project
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+[![Lego scrapper screenshot][product-screenshot]](https://example.com)
 
-## Learning Laravel
+LEGO is a very popular toy company. They have a huge number of products and occasionally decide to stop producing some of these products. The LEGO website has a list of products that are no longer in production and will soon be unavailable for purchase. They describe these products as ‘retiring soon’.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+We’d like to build a tool to monitor when products are added to the list of products soon to be retired. Our idea is that as soon as a product is added to the list, we will purchase a number of the units available, and then sell them in the future for a higher price when the product becomes harder for customers to purchase.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+This is a simple tool that will monitor the LEGO website and record when new products are added to the "Retiring Soon" page.
 
-## Laravel Sponsors
+This will involve scraping specific URLs on a regular basis, reporting the data with a simple UI, and sending email alerts.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+It collects the following attributes
 
-### Premium Partners
+-   Marketplace (UK or US)
+-   Product name
+-   Product Price
+-   Sale Price
+-   Discount amount
+-   Discount percentage
+-   Product details page URL
+-   Stock status (Available/Out of stock)
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/)**
-- **[OP.GG](https://op.gg)**
+After performing an update, the tool can send an email alert (to the email stored in MAIL_RECIPEINT environment variable) with a summary of any new products discovered, removal or updation of existing products.
 
-## Contributing
+### Built With
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+This section should list any major frameworks that you built your project using. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
 
-## Code of Conduct
+-   [Laravel](https://laravel.com)
+-   [Goutte](https://github.com/FriendsOfPHP/Goutte)
+-   [Tailwind](https://tailwindcss.com/)
+-   [VueJs](https://vuejs.org/)
+-   [MySQL](https://vuejs.org/)
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+<!-- GETTING STARTED -->
 
-## Security Vulnerabilities
+## Getting Started
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+To get a local copy up and running follow these simple example steps.
+
+### Prerequisites
+
+This is an example of how to list things you need to use the software and how to install them.
+
+-   npm
+    ```sh
+    npm install npm@latest -g
+    ```
+-   Install [composer](https://getcomposer.org/)
+
+### Installation
+
+1. Clone the repo
+    ```sh
+    git clone https://github.com/your_username_/Project-Name.git
+    ```
+2. Install NPM packages
+    ```sh
+    npm install
+    ```
+3. Install composer packages
+    ```sh
+    composer install
+    ```
+4. Run migrations
+    ```sh
+    php artisan migrate
+    ```
+
+<!-- USAGE EXAMPLES -->
+
+## Usage
+
+1. Boot the local server
+    ```sh
+    php artisan serve
+    ```
+2. Serve static assets locally using webpack (different terminal)
+    ```sh
+    npm run watch
+    ```
+
+To run the scraper manually, you can use the following command
+
+```sh
+php artisan scrape:lego
+```
+
+You can specify the market using the <code>market</code> option. (Available options: uk, us)
+
+```sh
+php artisan scrape:lego --market=us
+```
+
+If you want to scrape website without receiving email updates use the <code>silent</code> option
+
+```sh
+php artisan scrape:lego --market=us --silent
+```
+
+<!-- LICENSE -->
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Distributed under the MIT License. See `LICENSE` for more information.
+
+<!-- CONTACT -->
+
+## Contact
+
+Nishat Sayyed - [LinkedIn](https://www.linkedin.com/in/nishat-sayyed/)
+
+Email - nishatsayyed26@gmail.com
+
+Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
