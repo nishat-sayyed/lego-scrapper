@@ -147,3 +147,8 @@ Nishat Sayyed - [LinkedIn](https://www.linkedin.com/in/nishat-sayyed/)
 Email - nishatsayyed26@gmail.com
 
 Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
+
+<!-- MARKDOWN LINKS & IMAGES -->
+
+[linkedin-url]: https://www.linkedin.com/in/nishat-sayyed/
+[product-screenshot]: screenshot.png
