@@ -98,7 +98,8 @@ class ScrapeLego extends Command
             if (count($filteredArray) == 0) {
                 // if record not found in scrapedResults - delete record from db, email update (use delete email template)
                 $lego->delete();
-                if (!$silent) {
+                // alert only if element is in watchlist
+                if (!$silent && $lego->watch) {
                     Mail::to($recipientEmail)->send(new LegoDeleted($lego->toArray()));
                 }
                 // update in-memory db collection
@@ -128,7 +129,8 @@ class ScrapeLego extends Command
                     if (count($diff) > 0) {
                         // if changes found - update db record with scraped result and email update (use update email template)
                         LegoItem::where(['url' => $result['url']])->update($result);
-                        if (!$silent) {
+                        // alert only if element is in watchlist
+                        if (!$silent && $lego['watch']) {
                             Mail::to($recipientEmail)->send(new LegoUpdated($result));
                         }
                     }
