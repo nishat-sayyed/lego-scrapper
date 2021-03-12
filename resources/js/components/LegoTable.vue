@@ -1,20 +1,92 @@
 <template>
   <div class="overflow-x-auto">
-    <div class="flex items-center justify-end">
-      <div class="font-semibold mr-4" v-if="searchTerm">
-        <span>
-          Found {{ resultSet.length }}
-          {{ `${resultSet.length === 1 ? "result" : "results"}` }}
-        </span>
-      </div>
-      <div class="text-gray-600">
+    <div v-if="!loading" class="flex flex-col pl-3">
+      <div class="text-gray-600 mb-2">
+        <span class="font-semibold"> Search </span>
         <input
           class="border-2 border-gray-300 bg-white h-10 px-2 mt-2 mr-2 rounded-lg text-sm focus:outline-none"
           type="search"
           name="search"
-          placeholder="Search"
           v-model="searchTerm"
         />
+      </div>
+      <div class="flex flex-row">
+        <div class="mr-4">
+          <span class="font-semibold">Marketplace</span>
+          <div class="flex flex-row">
+            <div>
+              <input
+                type="radio"
+                class="form-radio h-3 w-3 text-red-600"
+                id="allCheckbox"
+                value="All"
+                v-model="marketplace"
+              />
+              <label for="allCheckbox">All</label>
+            </div>
+            <div class="mx-2">
+              <input
+                type="radio"
+                class="form-radio h-3 w-3 text-red-600"
+                id="ukCheckbox"
+                value="UK"
+                v-model="marketplace"
+              />
+              <label for="ukCheckbox">UK</label>
+            </div>
+            <div>
+              <input
+                type="radio"
+                class="form-radio h-3 w-3 text-red-600"
+                id="usCheckbox"
+                value="US"
+                v-model="marketplace"
+              />
+              <label for="usCheckbox">US</label>
+            </div>
+          </div>
+        </div>
+        <div>
+          <span class="font-semibold">Stock status</span>
+          <div class="flex flex-row">
+            <div>
+              <input
+                type="radio"
+                class="form-radio h-3 w-3 text-red-600"
+                id="allStatus"
+                value="All"
+                v-model="status"
+              />
+              <label for="allStatus">All</label>
+            </div>
+            <div class="mx-2">
+              <input
+                type="radio"
+                class="form-radio h-3 w-3 text-red-600"
+                id="availableStatus"
+                value="Available"
+                v-model="status"
+              />
+              <label for="availableStatus">Available</label>
+            </div>
+            <div>
+              <input
+                type="radio"
+                class="form-radio h-3 w-3 text-red-600"
+                id="outOfStockStatus"
+                value="Out of stock"
+                v-model="status"
+              />
+              <label for="outOfStockStatus">Out of stock</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="font-semibold">
+        <span>
+          Found {{ resultSet.length }}
+          {{ `${resultSet.length === 1 ? "result" : "results"}` }}
+        </span>
       </div>
     </div>
     <div
@@ -103,7 +175,7 @@
                 <!-- <td class="py-3 text-center">
                   <input
                     type="checkbox"
-                    class="form-checkbox h-5 w-5 bg-red-600"
+                    class="form-checkbox h-3 w-3 bg-red-600"
                     :checked="lego.watch === 1"
                     @change="toggleWatchlist($event, lego.id)"
                   />
@@ -134,17 +206,31 @@ export default {
       legos: [],
       searchTerm: "",
       loading: false,
+      marketplace: "All",
+      status: "All",
     };
   },
   computed: {
     resultSet() {
-      return this.legos.filter((row) => {
+      let legos = this.legos.filter((row) => {
         const name = row.name.toString().toLowerCase();
         const number = row.number.toString().toLowerCase();
         const searchTerm = this.searchTerm.toLowerCase();
 
         return name.includes(searchTerm) || number.includes(searchTerm);
       });
+      if (this.marketplace !== "All") {
+        legos = legos.filter((row) =>
+          this.marketplace.includes(row.marketplace)
+        );
+      }
+      if (this.status !== "All") {
+        legos = legos.filter((row) =>
+          this.status.toLowerCase().includes(row.stock_status.toLowerCase())
+        );
+      }
+
+      return legos;
     },
   },
   mounted() {
