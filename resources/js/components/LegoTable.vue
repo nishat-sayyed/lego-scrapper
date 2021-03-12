@@ -1,9 +1,20 @@
 <template>
   <div class="overflow-x-auto">
+    <div class="flex items-end justify-end">
+      <div class="text-gray-600">
+        <input
+          class="border-2 border-gray-300 bg-white h-10 px-2 mt-2 mr-2 rounded-lg text-sm focus:outline-none"
+          type="search"
+          name="search"
+          placeholder="Search"
+          v-model="searchTerm"
+        />
+      </div>
+    </div>
     <div
-      class="min-w-screen min-h-screen flex items-center justify-center bg-gray-100 font-sans overflow-hidden"
+      class="min-w-screen min-h-screen flex justify-center bg-gray-100 font-sans overflow-hidden"
     >
-      <div class="w-full lg:w-11/12">
+      <div class="w-full">
         <div class="bg-white shadow-md rounded my-6">
           <table class="min-w-max w-full table-auto">
             <thead>
@@ -19,25 +30,31 @@
                 <th class="py-3 px-6 text-center">Discount %</th>
                 <th class="py-3 px-6 text-center">Status</th>
                 <th class="py-3 px-6 text-center">Date spotted</th>
+                <!-- <th class="py-3 px-6 text-center">Watchlist</th> -->
               </tr>
             </thead>
             <tbody class="text-gray-600 text-sm font-light">
               <tr
-                v-for="lego in legos"
+                v-for="lego in resultSet"
                 :key="lego.id"
                 class="border-b border-gray-200 hover:bg-gray-100"
               >
                 <td class="py-3 px-6 text-left whitespace-nowrap">
                   <div class="flex items-center text-purple-600">
-                    <a target="_blank" :href="`https://${lego.url}`">{{
-                      lego.number
-                    }}</a>
+                    <a
+                      v-html="highlightMatches(lego.number)"
+                      target="_blank"
+                      :href="`https://${lego.url}`"
+                    ></a>
                   </div>
                 </td>
                 <td class="py-3 px-6 text-left">
                   <span class="font-medium">
-                    <a target="_blank" :href="`https://${lego.url}`"
-                      >{{ lego.name.substring(0, 40) }}
+                    <a
+                      v-html="highlightMatches(lego.name.substring(0, 40))"
+                      target="_blank"
+                      :href="`https://${lego.url}`"
+                    >
                     </a>
                   </span>
                 </td>
@@ -77,6 +94,14 @@
                 <td class="py-3 text-center">
                   <span>{{ lego.date_spotted }}</span>
                 </td>
+                <!-- <td class="py-3 text-center">
+                  <input
+                    type="checkbox"
+                    class="form-checkbox h-5 w-5 bg-red-600"
+                    :checked="lego.watch === 1"
+                    @change="toggleWatchlist($event, lego.id)"
+                  />
+                </td> -->
               </tr>
             </tbody>
           </table>
@@ -91,12 +116,29 @@ export default {
   data() {
     return {
       legos: [],
+      searchTerm: "",
     };
+  },
+  computed: {
+    resultSet() {
+      return this.legos.filter((row) => {
+        const name = row.name.toString().toLowerCase();
+        const number = row.number.toString().toLowerCase();
+        const searchTerm = this.searchTerm.toLowerCase();
+
+        return name.includes(searchTerm) || number.includes(searchTerm);
+      });
+    },
   },
   mounted() {
     this.fetchData();
   },
   methods: {
+    // toggleWatchlist(event, id) {
+    //   event.preventDefault();
+    //   const index = this.legos.findIndex((lego) => lego.id === id);
+    //   console.log(this.legos[index]);
+    // },
     fetchData() {
       fetch("/api/legos")
         .then((response) => response.json())
@@ -104,6 +146,22 @@ export default {
     },
     getCurrencySymbol(market) {
       return market === "US" ? "$" : "£";
+    },
+    highlightMatches(text) {
+      const matchExists = text
+        .toString()
+        .toLowerCase()
+        .includes(this.searchTerm.toLowerCase());
+      if (!matchExists) return text;
+
+      const re = new RegExp(this.searchTerm, "ig");
+      return text
+        .toString()
+        .replace(
+          re,
+          (matchedText) =>
+            `<strong class="text-yellow-600 bg-yellow-200">${matchedText}</strong>`
+        );
     },
   },
 };
