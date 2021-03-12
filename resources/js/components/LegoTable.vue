@@ -1,6 +1,12 @@
 <template>
   <div class="overflow-x-auto">
-    <div class="flex items-end justify-end">
+    <div class="flex items-center justify-end">
+      <div class="font-semibold mr-4" v-if="searchTerm">
+        <span>
+          Found {{ resultSet.length }}
+          {{ `${resultSet.length === 1 ? "result" : "results"}` }}
+        </span>
+      </div>
       <div class="text-gray-600">
         <input
           class="border-2 border-gray-300 bg-white h-10 px-2 mt-2 mr-2 rounded-lg text-sm focus:outline-none"
@@ -103,6 +109,16 @@
                   />
                 </td> -->
               </tr>
+              <tr v-if="loading">
+                <div class="flex justify-center py-4">
+                  <span class="font-medium">Loading data...</span>
+                </div>
+              </tr>
+              <tr v-else-if="resultSet.length === 0">
+                <div class="flex justify-center py-4">
+                  <span class="font-medium">No results found</span>
+                </div>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -117,6 +133,7 @@ export default {
     return {
       legos: [],
       searchTerm: "",
+      loading: false,
     };
   },
   computed: {
@@ -140,9 +157,13 @@ export default {
     //   console.log(this.legos[index]);
     // },
     fetchData() {
+      this.loading = true;
       fetch("/api/legos")
         .then((response) => response.json())
-        .then((response) => (this.legos = response));
+        .then((response) => {
+          this.legos = response;
+          this.loading = false;
+        });
     },
     getCurrencySymbol(market) {
       return market === "US" ? "$" : "£";
