@@ -1,86 +1,27 @@
 <template>
   <div class="overflow-x-auto">
     <div v-if="!loading" class="flex flex-col pl-3">
-      <div class="text-gray-600 mb-2">
-        <span class="font-semibold"> Search </span>
-        <input
-          class="border-2 border-gray-300 bg-white h-10 px-2 mt-2 mr-2 rounded-lg text-sm focus:outline-none"
-          type="search"
-          name="search"
-          v-model="searchTerm"
-        />
-      </div>
+      <Searchbar styles="mb-2" v-model="searchTerm" />
       <div class="flex flex-row">
-        <div class="mr-4">
-          <span class="font-semibold">Marketplace</span>
-          <div class="flex flex-row">
-            <div>
-              <input
-                type="radio"
-                class="form-radio h-3 w-3 text-red-600"
-                id="allCheckbox"
-                value="All"
-                v-model="marketplace"
-              />
-              <label for="allCheckbox">All</label>
-            </div>
-            <div class="mx-2">
-              <input
-                type="radio"
-                class="form-radio h-3 w-3 text-red-600"
-                id="ukCheckbox"
-                value="UK"
-                v-model="marketplace"
-              />
-              <label for="ukCheckbox">UK</label>
-            </div>
-            <div>
-              <input
-                type="radio"
-                class="form-radio h-3 w-3 text-red-600"
-                id="usCheckbox"
-                value="US"
-                v-model="marketplace"
-              />
-              <label for="usCheckbox">US</label>
-            </div>
-          </div>
-        </div>
-        <div>
-          <span class="font-semibold">Stock status</span>
-          <div class="flex flex-row">
-            <div>
-              <input
-                type="radio"
-                class="form-radio h-3 w-3 text-red-600"
-                id="allStatus"
-                value="All"
-                v-model="status"
-              />
-              <label for="allStatus">All</label>
-            </div>
-            <div class="mx-2">
-              <input
-                type="radio"
-                class="form-radio h-3 w-3 text-red-600"
-                id="availableStatus"
-                value="Available"
-                v-model="status"
-              />
-              <label for="availableStatus">Available</label>
-            </div>
-            <div>
-              <input
-                type="radio"
-                class="form-radio h-3 w-3 text-red-600"
-                id="outOfStockStatus"
-                value="Out of stock"
-                v-model="status"
-              />
-              <label for="outOfStockStatus">Out of stock</label>
-            </div>
-          </div>
-        </div>
+        <SearchFilter
+          styles="mr-4"
+          title="Marketplace"
+          :options="[
+            { label: 'All', value: 'All' },
+            { label: 'US', value: 'US' },
+            { label: 'UK', value: 'UK' },
+          ]"
+          v-model="marketplace"
+        />
+        <SearchFilter
+          title="Stock status"
+          :options="[
+            { label: 'All', value: 'All' },
+            { label: 'Available', value: 'Available' },
+            { label: 'Out of stock', value: 'Out of stock' },
+          ]"
+          v-model="status"
+        />
       </div>
       <div class="font-semibold">
         <span>
@@ -129,7 +70,7 @@
                 <td class="py-3 px-6 text-left">
                   <span class="font-medium">
                     <a
-                      v-html="highlightMatches(lego.name.substring(0, 40))"
+                      v-html="highlightMatches(lego.name)"
                       target="_blank"
                       :href="`https://${lego.url}`"
                     >
@@ -146,8 +87,7 @@
                 </td>
                 <td class="py-3 px-6 text-center">
                   <span class="font-medium">{{
-                    getCurrencySymbol(lego.marketplace) +
-                    (lego.sale_price ? lego.sale_price : lego.price)
+                    getCurrencySymbol(lego.marketplace) + lego.sale_price
                   }}</span>
                 </td>
                 <td class="py-3 px-6 text-center">
@@ -172,14 +112,6 @@
                 <td class="py-3 text-center">
                   <span>{{ lego.date_spotted }}</span>
                 </td>
-                <!-- <td class="py-3 text-center">
-                  <input
-                    type="checkbox"
-                    class="form-checkbox h-3 w-3 bg-red-600"
-                    :checked="lego.watch === 1"
-                    @change="toggleWatchlist($event, lego.id)"
-                  />
-                </td> -->
               </tr>
               <tr v-if="loading">
                 <div class="flex justify-center py-4">
@@ -200,6 +132,9 @@
 </template>
 
 <script>
+import Searchbar from "./Searchbar.vue";
+import SearchFilter from "./SearchFilter.vue";
+
 export default {
   data() {
     return {
@@ -216,7 +151,6 @@ export default {
         const name = row.name.toString().toLowerCase();
         const number = row.number.toString().toLowerCase();
         const searchTerm = this.searchTerm.toLowerCase();
-
         return name.includes(searchTerm) || number.includes(searchTerm);
       });
       if (this.marketplace !== "All") {
@@ -236,12 +170,8 @@ export default {
   mounted() {
     this.fetchData();
   },
+  components: { Searchbar, SearchFilter },
   methods: {
-    // toggleWatchlist(event, id) {
-    //   event.preventDefault();
-    //   const index = this.legos.findIndex((lego) => lego.id === id);
-    //   console.log(this.legos[index]);
-    // },
     fetchData() {
       this.loading = true;
       fetch("/api/legos")
