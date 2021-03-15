@@ -163,11 +163,11 @@ class ScrapeLego extends Command
         $result = $crawler->filter('li[data-test="product-item"] div[data-test="product-leaf"]')->each(function ($node) use ($market, $priceDelimiter) {
             $marketplace = $market == 'us' ? 'US' : 'UK';
             $url = $node->filter('[data-test="product-leaf-title-link"]')->first()->attr('href');
-            $name = $node->filter('[data-test="product-leaf-title"]')->text();
+            $name = substr($node->filter('[data-test="product-leaf-title"]')->text(), 0, 40);
             $itemNumber = intval(substr($url, strrpos($url, '-') + 1));
             $priceText = $node->filter('[data-test="product-price"]')->text();
             $price = floatval(str_replace($priceDelimiter, '', substr($priceText, strrpos($priceText, $priceDelimiter))));
-            $salePrice = null;
+            $salePrice = $price;
             if ($node->filter('[data-test="product-price-sale"]')->count() > 0) {
                 $salePriceText = $node->filter('[data-test="product-price-sale"]')->text();
                 $salePrice = floatval(str_replace($priceDelimiter, '', substr($salePriceText, strrpos($salePriceText, $priceDelimiter))));
