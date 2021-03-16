@@ -32,6 +32,7 @@
 <!-- ABOUT THE PROJECT -->
 
 ## About The Project
+Live Demo: https://peaceful-dawn-14209.herokuapp.com/
 
 [![Lego scrapper screenshot][product-screenshot]](https://github.com/nishat-sayyed/lego-scrapper/blob/main/screenshot.png)
 
