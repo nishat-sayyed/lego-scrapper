@@ -50,11 +50,13 @@ class ScrapeLego extends Command
         $url = $market == 'us' ? 'https://www.lego.com/en-us/categories/retiring-soon' : 'https://www.lego.com/en-gb/categories/retiring-soon';
         $client = new Client();
 
-        echo "Getting data from $url \n";
+        $this->info("Getting data from $url");
+        // echo "Getting data from $url \n";
 
         $crawler = $client->request('GET', $url);
 
-        echo "Crawling results...\n";
+        $this->info("Crawling results...");
+        // echo "Crawling results...\n";
 
         // Crawl the first page
         $result = $this->getResultsFromCrawler($crawler, $market);
@@ -72,11 +74,13 @@ class ScrapeLego extends Command
         // LegoItem::truncate();
         // LegoItem::insert($result);
 
-        echo "Merging result set with database... \n";
+        $this->info("Merging result set with database...");
+        // echo "Merging result set with database... \n";
 
         $this->mergeChangesWithDb($result, $market);
 
-        echo "Lego data scraped for $market market \n";
+        $this->info("Lego data scraped for $market market");
+        // echo "Lego data scraped for $market market \n";
         return 0;
     }
 
